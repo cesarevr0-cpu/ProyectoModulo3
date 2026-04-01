@@ -4,10 +4,16 @@ Prototipo para la propuesta 3 del proyecto integrador:
 usar expresiones faciales (emociones) como entrada al sistema educativo.
 """
 
+import os
 import cv2
 from deepface import DeepFace
 
 # ============ INICIALIZAR CÁMARA ============
+
+if not os.path.exists("output"):
+    os.makedirs("output")
+
+frame_count = 0
 
 # 0 = cámara por defecto del sistema
 video_capture = cv2.VideoCapture(0)
@@ -78,6 +84,13 @@ while True:
             print(f"  Rostro {i}: {emo}")
     else:
         print("No se detectaron emociones claras en este frame.")
+
+    frame_count += 1
+    
+    if frame_count % 30 == 0:
+        file_path = os.path.join("output", f"frame_{frame_count}.jpg")
+        cv2.imwrite(file_path, frame)
+        print(f"Imagen guardada: {file_path}")
 
     # Mostrar ventana con los resultados
     cv2.imshow("Rostros y emociones (DeepFace)", frame)
